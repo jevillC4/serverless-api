@@ -1,0 +1,277 @@
+openapi: 3.0.3
+info:
+  title: Challenge Serverless API
+  description: Reto técnico Softtek - Integración con SWAPI
+  version: 1.0.0
+paths:
+  /create:
+    post:
+      operationId: create
+      tags:
+        - create
+      summary: Crea un registro en DynamoDB
+      description: Esta operación permite registrar un personaje, puede recibir un payload con keys en Español o Ingles
+      requestBody:
+        required: true
+        description: payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Character'
+      responses:
+        201:
+          description: CREATED
+          content:
+            application/json:
+              example: { 'message': 'Personaje creado.' }
+        400:
+          description: BAD_REQUEST
+          content:
+            application/json:
+              example:
+                {
+                  'message': 'Errores de validación encontrados.',
+                  'errors': [{ 'campo': '', 'message': '' }],
+                }
+        500:
+          description: INTERNAL SERVER ERROR
+          content:
+            application/json:
+              example: { 'message': 'Error interno del servidor.', 'error': '' }
+  /getAll:
+    get:
+      operationId: getAll
+      tags:
+        - getAll
+      summary: Obtiene todos los registros
+      description: Esta operacion permite obtener todos los registros
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAll'
+        500:
+          description: INTERNAL SERVER ERROR
+          content:
+            application/json:
+              example:
+                { 'message': 'Error al recuperar los datos.', 'error': '' }
+  /deleteAll:
+    delete:
+      operationId: deleteAll
+      tags:
+        - deleteAll
+      summary: Elimina todos los registros
+      description: Esta operación permite eliminar todos los registros de la base de datos
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              example:
+                { 'message': 'Todos los datos han sido eliminados con éxito.' }
+        500:
+          description: INTERNAL SERVER ERROR
+          content:
+            application/json:
+              example:
+                { 'message': 'Errores de validación encontrados.', 'error': '' }
+components:
+  schemas:
+    GetAll:
+      type: object
+      description: Objeto que contiene todos los registros
+      properties:
+        message:
+          type: string
+          example: Datos recuperados con éxito.
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacterES'
+    Character:
+      type: object
+      description: Objeto de registro que representa un personaje de Star Wars
+      properties:
+        name:
+          type: string
+          description: Nombre del personaje
+          example: 'Luke Skywalker'
+        height:
+          type: string
+          description: Altura del personaje en centímetros
+          example: '172'
+        mass:
+          type: string
+          description: Masa del personaje en kilogramos
+          example: '77'
+        hair_color:
+          type: string
+          description: Color de pelo del personaje
+          example: 'blond'
+        skin_color:
+          type: string
+          description: Color de piel del personaje
+          example: 'fair'
+        eye_color:
+          type: string
+          description: Color de ojos del personaje
+          example: 'blue'
+        birth_year:
+          type: string
+          description: Año de nacimiento del personaje
+          example: '19BBY'
+        gender:
+          type: string
+          description: Género del personaje
+          example: 'male'
+        homeworld:
+          type: string
+          description: URL del planeta natal del personaje
+          example: 'https://swapi.py4e.com/api/planets/1/'
+        films:
+          type: array
+          description: Lista de URLs de las películas en las que aparece el personaje
+          items:
+            type: string
+            example: 'https://swapi.py4e.com/api/films/1/'
+        species:
+          type: array
+          description: Lista de URLs de las especies a las que pertenece el personaje
+          items:
+            type: string
+            example: 'https://swapi.py4e.com/api/species/1/'
+        vehicles:
+          type: array
+          description: Lista de URLs de los vehículos que ha utilizado el personaje
+          items:
+            type: string
+            example: 'https://swapi.py4e.com/api/vehicles/14/'
+        starships:
+          type: array
+          description: Lista de URLs de las naves espaciales que ha pilotado el personaje
+          items:
+            type: string
+            example: 'https://swapi.py4e.com/api/starships/12/'
+        created:
+          type: string
+          format: date-time
+          description: Fecha de creación del registro en formato ISO 8601
+          example: '2014-12-09T13:50:51.644000Z'
+        edited:
+          type: string
+          format: date-time
+          description: Fecha de última edición del registro en formato ISO 8601
+          example: '2014-12-20T21:17:56.891000Z'
+        url:
+          type: string
+          description: URL única del personaje en la API
+          example: 'https://swapi.py4e.com/api/people/1/'
+      required:
+        - name
+        - height
+        - mass
+        - hair_color
+        - skin_color
+        - eye_color
+        - birth_year
+        - gender
+        - homeworld
+        - films
+        - created
+        - edited
+        - url
+    CharacterES:
+      type: object
+      description: Objeto de registro que representa un personaje de Star Wars
+      properties:
+        nombre:
+          type: string
+          description: Nombre del personaje
+          example: 'Luke Skywalker'
+        altura:
+          type: string
+          description: Altura del personaje en centímetros
+          example: '172'
+        masa:
+          type: string
+          description: Masa del personaje en kilogramos
+          example: '77'
+        color_de_pelo:
+          type: string
+          description: Color de pelo del personaje
+          example: 'blond'
+        color_de_piel:
+          type: string
+          description: Color de piel del personaje
+          example: 'fair'
+        color_de_ojos:
+          type: string
+          description: Color de ojos del personaje
+          example: 'blue'
+        anio_de_nacimiento:
+          type: string
+          description: Año de nacimiento del personaje
+          example: '19BBY'
+        genero:
+          type: string
+          description: Género del personaje
+          example: 'male'
+        planeta_natal:
+          type: string
+          description: URL del planeta natal del personaje
+          example: 'https://swapi.py4e.com/api/planets/1/'
+        peliculas:
+          type: array
+          description: Lista de URLs de las películas en las que aparece el personaje
+          items:
+            type: string
+            example: 'https://swapi.py4e.com/api/films/1/'
+        especies:
+          type: array
+          description: Lista de URLs de las especies a las que pertenece el personaje
+          items:
+            type: string
+            example: 'https://swapi.py4e.com/api/species/1/'
+        vehiculos:
+          type: array
+          description: Lista de URLs de los vehículos que ha utilizado el personaje
+          items:
+            type: string
+            example: 'https://swapi.py4e.com/api/vehicles/14/'
+        naves_espaciales:
+          type: array
+          description: Lista de URLs de las naves espaciales que ha pilotado el personaje
+          items:
+            type: string
+            example: 'https://swapi.py4e.com/api/starships/12/'
+        creado:
+          type: string
+          format: date-time
+          description: Fecha de creación del registro en formato ISO 8601
+          example: '2014-12-09T13:50:51.644000Z'
+        editado:
+          type: string
+          format: date-time
+          description: Fecha de última edición del registro en formato ISO 8601
+          example: '2014-12-20T21:17:56.891000Z'
+        url:
+          type: string
+          description: URL única del personaje en la API
+          example: 'https://swapi.py4e.com/api/people/1/'
+      required:
+        - nombre
+        - altura
+        - masa
+        - color_de_pelo
+        - color_de_piel
+        - color_de_ojos
+        - anio_de_nacimiento
+        - genero
+        - planeta_natal
+        - peliculas
+        - creado
+        - editado
+        - url
